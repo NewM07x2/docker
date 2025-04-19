@@ -13,4 +13,10 @@ docker-compose up -d
 docker-compose down -v
 
 ALTER DATABASE postgres SET timezone TO 'Asia/Tokyo';
-ALTER DATABASE postgres SET timezone TO 'Asia/Tokyo';
+
+<!-- テーブル名取得 -->
+SELECT table_name
+FROM information_schema.tables
+WHERE table_schema = 'public';
+
+select * from users;

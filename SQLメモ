@@ -10,17 +10,17 @@ DROP TABLE IF EXISTS task;
 CREATE TABLE task (
     id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     task_name VARCHAR(50) NOT NULL,
-    task_detail VARCHAR(255) NOT NULL,
-    status VARCHAR(100) NOT NULL,
-    update_date TIMESTAMP,
+    task_detail VARCHAR(255),
+    status VARCHAR(10) NOT NULL DEFAULT 'new',
+    update_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 INSERT INTO task (task_name, task_detail, status) 
 VALUES 
-('タスク1', 'タスク1の詳細', '0'),
-('タスク2', 'タスク2の詳細', '1'),
-('タスク3', 'タスク3の詳細', '9');
+('タスク1', 'タスク1の詳細', 'new'),
+('タスク2', 'タスク2の詳細', 'progress'),
+('タスク3', 'タスク3の詳細', 'completed');
 
 CREATE OR REPLACE FUNCTION update_modified_column()
 RETURNS TRIGGER AS $$
@@ -36,8 +36,10 @@ BEFORE UPDATE ON task
 FOR EACH ROW
 EXECUTE FUNCTION update_modified_column();
 
-select * from task;
+select * from task where status = 'completed';
 
 
 
 DROP TABLE IF EXISTS task;
+
+
