@@ -1,3 +1,4 @@
+name: Postgres_Server
 version: '3.8'
 
 services:
