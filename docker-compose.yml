@@ -1,4 +1,4 @@
-name: Postgres_Server
+name: postgres_server
 
 services:
   db:
