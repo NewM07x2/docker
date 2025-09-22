@@ -1,15 +1,43 @@
-DROP TABLE IF EXISTS "user";
+-- PostgreSQLでUUIDを主キーとして自動生成するには、UUID型とuuid-ossp拡張機能を使うのが一般的です。
+-- ✅ ステップ1：拡張機能の有効化（初回のみ）
+-- まず、データベースでUUIDを生成するための拡張機能を有効にします。このコマンドはデータベースごとに一度だけ実行すればOKです。
+
+-- CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+-- ✅ ステップ2：テーブル定義の修正
+-- idカラムの型をSERIALからUUIDに変更し、DEFAULT値としてUUIDを自動生成する関数uuid_generate_v4()を指定します。
+
 CREATE TABLE "user" (
-    id SERIAL PRIMARY KEY,
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     name VARCHAR(50) UNIQUE NOT NULL,
     mail VARCHAR(100) UNIQUE NOT NULL,
     updated_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE "user" (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    name VARCHAR(50) UNIQUE NOT NULL,
+    mail VARCHAR(100) UNIQUE NOT NULL,
+    updated_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+DROP TABLE IF EXISTS "user";
+CREATE TABLE "user" (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    name VARCHAR(50) UNIQUE NOT NULL,
+    mail VARCHAR(100) UNIQUE NOT NULL,
+    updated_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+INSERT INTO "user" (name, mail) 
+VALUES 
+('Tom', 'tom@gmail.com'),
+('May', 'may@gmail.com');
+
 DROP TABLE IF EXISTS "task";
 CREATE TABLE "task" (
-    id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     task_name VARCHAR(50) NOT NULL,
     task_detail VARCHAR(255),
     status VARCHAR(10) NOT NULL DEFAULT 'new',
@@ -22,28 +50,9 @@ VALUES
 ('タスク2', 'タスク2の詳細', 'progress'),
 ('タスク3', 'タスク3の詳細', 'completed');
 
-CREATE OR REPLACE FUNCTION update_modified_column()
-RETURNS TRIGGER AS $$
-BEGIN
-    NEW.update_date = CURRENT_TIMESTAMP;
-    RETURN NEW;
-END;
-$$
-language 'plpgsql';
-
-CREATE TRIGGER update_task_modtime
-BEFORE UPDATE ON task
-FOR EACH ROW
-EXECUTE FUNCTION update_modified_column();
-
-select * from task where status = 'completed';
-
-
-
-DROP TABLE IF EXISTS "test";
 DROP TABLE IF EXISTS "test";
 CREATE TABLE "test" (
-    id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     content VARCHAR(255),
     updated_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -53,3 +62,20 @@ VALUES
 ('test1'),
 ('test2'),
 ('test3');
+
+-- CREATE OR REPLACE FUNCTION update_modified_column()
+-- RETURNS TRIGGER AS $$
+-- BEGIN
+--     NEW.update_date = CURRENT_TIMESTAMP;
+--     RETURN NEW;
+-- END;
+-- $$
+-- language 'plpgsql';
+
+-- CREATE TRIGGER update_task_modtime
+-- BEFORE UPDATE ON task
+-- FOR EACH ROW
+-- EXECUTE FUNCTION update_modified_column();
+
+-- select * from task where status = 'completed';
+
