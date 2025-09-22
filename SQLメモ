@@ -1,22 +1,22 @@
-CREATE TABLE users (
+DROP TABLE IF EXISTS "user";
+CREATE TABLE "user" (
     id SERIAL PRIMARY KEY,
-    username VARCHAR(50) UNIQUE NOT NULL,
-    email VARCHAR(100) UNIQUE NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    name VARCHAR(50) UNIQUE NOT NULL,
+    mail VARCHAR(100) UNIQUE NOT NULL,
+    updated_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-DROP TABLE IF EXISTS task;
-
-CREATE TABLE task (
+DROP TABLE IF EXISTS "task";
+CREATE TABLE "task" (
     id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     task_name VARCHAR(50) NOT NULL,
     task_detail VARCHAR(255),
     status VARCHAR(10) NOT NULL DEFAULT 'new',
-    update_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-
-INSERT INTO task (task_name, task_detail, status) 
+INSERT INTO "task" (task_name, task_detail, status) 
 VALUES 
 ('タスク1', 'タスク1の詳細', 'new'),
 ('タスク2', 'タスク2の詳細', 'progress'),
@@ -40,6 +40,16 @@ select * from task where status = 'completed';
 
 
 
-DROP TABLE IF EXISTS task;
-
-
+DROP TABLE IF EXISTS "test";
+DROP TABLE IF EXISTS "test";
+CREATE TABLE "test" (
+    id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    content VARCHAR(255),
+    updated_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+INSERT INTO "test" (content) 
+VALUES 
+('test1'),
+('test2'),
+('test3');
